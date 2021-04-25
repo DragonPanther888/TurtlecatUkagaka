@@ -1,0 +1,362 @@
+﻿//---------------------------The User's Name--------------------------
+//This .dic file has to do with setting the user's name and suffix/prefix. You may recall some of the functions mentioned here from bootend.dic. As you can see, you can spread functions across multiple .dic files if you like! Just remember my note in bootend.dic about the different between OnFunction and Function.
+
+//This file is fairly short, so don't worry! It shouldn't take you too long to finish.
+
+//Make sure to read the walkthrough (http://www.ashido.com/ukagaka/walkthrough.html) for more details about how to properly format ghost dialogue!
+//I will reiterate that you should be editing these in Notepad++, and in particular, you should set the Language to C (or Java I guess) to properly highlight all the text. It will make things A LOT EASIER for you, trust me! It will also help you keep track of your brackets in case you forget some. If you click on a line with a bracket in Notepad++, it should highlight where the other bracket ends, or turn purple if there's no finishing bracket (which you should definitely fix!)
+//It will also highlight my commented lines in green, so you'll know where they are. Any line beginning with // is a commented line that the code will not read. It's just for your reference!
+
+
+//--OnTeachName
+//This is called from the config menu in the main character's double click menu when the user says they want to change their name. If you look in menu.dic you'll see the code leading to here.
+
+OnChangeName	
+{
+	"\0\s[0]A different name?\w4 Of course,\w4 putdearenvelopehere.\w4 What shall I call you from now on?"
+	--
+	"\n\n\![*]\q[Cancel,OnConfigMenu,cancelled name change]\![set,balloontimeout,-1]\![open,inputbox,OnNameTeach,-1]\e"
+}
+
+
+//--OnNameTeach
+//This is where the user inputs their name and the ghost analyzes it. If you want your ghost to have specific responses to certain names, this is where you would add them. If not, you can erase all the way from the initial if down to the else statement, only leaving from ""\0\s[0]Do you want a title?" to "\![*]\q[-san,titlesan]\e". So it'd look something like
+
+//OnNameTeach
+// {
+	//tempname = reference0
+	
+//"\0\s[0]Do you want a title?\w4\n\n[half]\![*]\q[Nope,titlenone]\n"
+	//	--
+	//	if presuffix == "masculine"
+	//	{
+	//	"\![*]\q[Mr.,titlemr]\n/
+	//	\![*]\q[Master,titlemaster]\n"
+	//	}
+	//	elseif presuffix == "feminine" 
+	//	{
+	//	"\![*]\q[Ms.,titlems]\n/
+	//	\![*]\q[Lady,titlelady]\n"
+	//	}
+	//	-- 
+	//	"\![*]\q[-ssi,titlessi]\n/
+	//	\![*]\q[-san,titlesan]\e"
+// }
+
+//If you did so. Otherwise, just fill things the next things as you like.
+
+OnNameTeach
+{
+	tempname = reference0 //this stores the name value from reference0 in tempname
+	reference0 = TOLOWER(reference0) //changes it to lowercase
+	reference0 = REPLACE(reference0," ","") //removes spaces
+	reference0 = REPLACE(reference0,".","") //removes periods
+	reference0 = REPLACE(reference0,"-","") //removes dashes
+	
+	if reference0 == "kade" //this checks to see if the user input any variation of the name "Girl". You may want to put in a check here if the user tries to name themselves the same name as your characters, since that could be confusing in dialogue. Or just a response to any kind of strange name, like Barack Obama or Cindy Crawford or Mike Nelson or Random Hajile. Or you can prevent certain offensive names if you don't want users using them. Really the power is yours here.
+	{
+		"\0\s[1]I'm afraid that name is already mine,\w4 and you will have to choose another.\![open,inputbox,OnNameTeach,-1]"
+		//Note here that it's using the same tag as above to reopen the text box to let the user put in another name. You can replace the dialogue with whatever as long as you keep the \![open,inputbox,OnNameTeach,-1] tag.
+	}
+	elseif reference0 == "" //This is if the user doesn't put in a name at all, since that'd also get awkward in dialogue.
+	{
+		username = "Friend"
+		
+		"\0\s[1]I'm afraid I can't call you absolutely nothing,\w4 so 'Friend'\w2 will have to do.\w9\n\n[half]"
+		--
+		NameDone
+	}
+	else //if the user put in something not specified above, ie a proper name the ghost can use. 
+	//If you want to remove the title system, what you'd want to do is erase everything in this else statement regarding titles and replace it with something like this.
+	//else
+	//{
+	//username = tempname
+	//"\0\s[0]The user is now called %(username).\e"
+	//}
+	{
+		"\0\s[0]Would you like a title?\w4\n\n[half]\![*]\q[No thank you,titlenone]\n"
+		//You can replace "\0\s[0]Do you want a title?", but don't touch the rest of it.
+		--
+		"\![*]\q[Mr.,titlemr]\n/
+		\![*]\q[Sir,titlesir]\n/
+		\![*]\q[Ms.,titlems]\n/
+		\![*]\q[Lady,titlelady]\n/
+		\![*]\q[Mx.,titlemx]\n/
+		\![*]\q[Ind.,titleind]\e"
+		//Note that the final line here ends with \e instead of \n/, since it is the final option. Make sure your final option (and ONLY your final option) always ends with \e. More on that in the box below.
+	}
+}
+	//*********************Advanced User Info*******************************
+	//Adding new titles for your users to use is simply a matter of copy and pasting creatively. You can see how the ghost puts together the title and your name in the Select. sections below. Above, you simply need to add a new option and link it to a new Select. For example, you could add "\![*]\q[Mistress,titlemistress]\n/" between Ms. and Lady up there, then write up a Select.titlemistress below that fits the pattern of the others.
+	//***********************************************************************
+	
+	//The following Select.title[word] functions add the title to the user's name, then go to the final step, NameDone. You don't have to touch any of these. Advanced users, notice how these match the linked functions in the choices above.
+	
+Select.titlenone
+{
+		username = tempname
+		NameDone
+}
+
+Select.titlemr
+{
+		username = "Mr. " + tempname
+		NameDone
+}
+
+Select.titlesir
+{
+		username = "Sir " + tempname
+		NameDone
+}
+		
+Select.titlems
+{
+		username = "Ms. " + tempname
+		NameDone
+}
+
+Select.titlelady
+{
+		username = "Lady " + tempname
+		NameDone
+}
+
+Select.titlemx
+{
+		username = "Mx. " + tempname
+		NameDone
+}
+
+Select.titleind
+{
+		username = "Ind. " + tempname
+		NameDone
+}
+
+//--NameDone
+//This is the final bit of dialogue your ghosts will have when the user changes their name. There is a special section here for when the user first boots the ghost.
+
+NameDone
+{
+	if firstboot == 0 //If the user was changing their name through the config menu
+	{
+		"\0\s[0]\i[1]%(username).\w2.\w2.\w4 \s[0]I'll remember.\n\n\![*]\q[Back to config,OnConfigMenu]\n\![*]\q[I'm done,cancelnodialogue]\e"
+	}
+	else //This is continuing from FirstBoot
+	{
+		"\0\s[0]%(username)!\w4 What a wonderful name.\w4 Pray tell,\w4 how may I refer to you?\n\n[half]"
+		--
+		"\![*]\q[He/Him/His,OnPronouns,masc]\n/
+		\![*]\q[She/Her/Hers,OnPronouns,fem]\n/	
+		\![*]\q[They/Them/Their,OnPronouns,undef]\e"
+	}
+}
+OnChangePronoun //Envelope names are the same as the GT template, since I figured most people will be used to them.
+{
+	"\0\s[0]How may I refer to you from now on?"
+	--
+	"\n\n\_q/
+	\![*]\q[He/Him/His,OnPronouns,masc]\n/
+	\![*]\q[She/Her/Hers,OnPronouns,fem]\n/	
+	\![*]\q[They/Them/Their,OnPronouns,undef]\e"
+}
+
+
+OnPronouns
+{
+	if reference0 == "masc"
+	{
+		they = "he"
+		them = "him"
+		their = "his"
+		theyre = "he's"
+	}
+	elseif reference0 == "fem"
+	{
+		they = "she"
+		them = "her"
+		their = "her"
+		theyre = "she's"
+	}
+	else
+	{
+		they = "they"
+		them = "them"
+		their = "their"
+		theyre = "they're"
+		
+	}
+	--
+	if firstboot == 1 //This is the end of the firstboot dialogue
+	{
+		firstboot = 0
+		"I see.\w4 A pleasure to meet you,\w4 %(username).\![leave,passivemode]\e"
+	}
+	else //This is if the user is changing their pronouns through the menu
+	{
+		"\0\s[0]%(they)/%(them).\w4 I'll remember."
+		--
+		"\n\n\![*]\q[Back to config,OnConfigMenu]\n\![*]\q[I'm done,cancelnodialogue]\e"
+	}
+}
+
+OnChangeDear
+{
+	"\0\s[0]Should I call you..."
+	--
+	"\n\n\_q/
+	\![*]\q[My dear friend?,choicefriend]\n/
+	\![*]\q[My dear fellow?,choicefellow]\n/
+	\![*]\q[My dear lady?,choicelady]\n/
+	\![*]\q[Just my dear?,choicedear]\n/	
+	\![*]\q[Do not call me dear,choicedonut]\e"
+	
+}
+
+Select.choicefriend
+{
+	calldear = "friend"
+	"Alright, I'll call you '%(dearuser)'.\e"
+}
+
+Select.choicefellow
+{
+	calldear = "fellow"
+	"Alright, I'll call you '%(dearuser)'.\e"
+}
+
+Select.choicelady
+{
+	calldear = "lady"
+	"Alright, I'll call you '%(dearuser)'.\e"
+}
+
+Select.choicedear
+{
+	calldear = "dear"
+	"Alright, I'll call you '%(dearuser)'.\e"
+}
+
+Select.choicedonut
+{
+	calldear = "donut"
+	"Alright, I'll call you '%(dearuser)'.\e"
+}
+//Pronoun examples for my own sake:
+//"%(heshe) left that there."
+//"%(hisher) work is really cool."
+//"I'll ask %(himher) later."
+//"%(hesshes) really good at it."
+
+OnChangeBirthday //Pulled a lot of this from the GT template, but I also modified it a lot
+{
+	oldbirthday = birthday
+	
+	"\0\s[0]Your birthday?\w8 Of course.\w8\w8 What month were you born in?"
+	--
+	"\n\n\![*]\q[Cancel,OnConfigMenu,cancelled birthday month]\![open,inputbox,OnUserBornMonth,-1]\![set,balloontimeout,-1]\e"
+}
+
+//birthday[0] - word birthday
+//birthday[1] - number birthday
+//birthday[2] - word month
+//birthday[3] - word day
+//birthday[4] - number month
+//birthday[5] - number day
+//Use birthday[0] to display the user's birthday, and birthday[1] to do checks with the numbers
+
+OnUserBornMonth
+{
+	_tempmonth = reference0 //this stores what the user put in as a variable called _tempmonth
+	_tempmonth = TOLOWER(_tempmonth) //changes it to lowercase
+	
+	if _tempmonth == "january" || _tempmonth == "1" {birthday[4] = 1; birthday[2] = "January"}
+	elseif _tempmonth == "february" || _tempmonth == "2" {birthday[4] = 2; birthday[2] = "February"}
+	elseif _tempmonth == "march" || _tempmonth == "3" {birthday[4] = 3; birthday[2] = "March"}
+	elseif _tempmonth == "april" || _tempmonth == "4" {birthday[4] = 4; birthday[2] = "April"}
+	elseif _tempmonth == "may" || _tempmonth == "5" {birthday[4] = 5; birthday[2] = "May"}
+	elseif _tempmonth == "june" || _tempmonth == "6" {birthday[4] = 6; birthday[2] = "June"}
+	elseif _tempmonth == "july" || _tempmonth == "7" {birthday[4] = 7; birthday[2] = "July"}
+	elseif _tempmonth == "august" || _tempmonth == "8" {birthday[4] = 8; birthday[2] = "August"}
+	elseif _tempmonth == "september" || _tempmonth == "9" {birthday[4] = 9; birthday[2] = "September"}
+	elseif _tempmonth == "october" || _tempmonth == "10" {birthday[4] = 10; birthday[2] = "October"}
+	elseif _tempmonth == "november" || _tempmonth == "11" {birthday[4] = 11; birthday[2] = "November"}
+	elseif _tempmonth == "december" || _tempmonth == "12" {birthday[4] = 12; birthday[2] = "December"}
+	else //if the month isn't a valid month, like 32 or something.
+	{
+		"\0\s[1]I'm not sure %(_tempmonth) is quite correct.\w4 Try again?"
+		--
+		"\n\n\![*]\q[Cancel,OnConfigMenu,cancelled birthday month]\![open,inputbox,OnUserBornMonth,-1]\![set,balloontimeout,-1]\e"
+	}
+	--
+	//If it's a valid month
+	"\s[0]%(birthday[2]), I see, I see...\w8 What was the day?"
+	--
+	"\n\n\![*]\q[Cancel,OnConfigMenu,cancelled birthday day]\![open,inputbox,OnUserBornDay,-1]\![set,balloontimeout,-1]\e"
+}
+
+OnUserBornDay
+{
+	
+	_tempday = reference0 //storing the input in _tempday
+	_tempday = TOLOWER(_tempday) //changes it to lowercase
+	_tempday = REPLACE(_tempday,"st","") //if the user types something like 2nd, 3rd, etc, this will make it just the number. It'll just add the suffix back later on the one that actually shows.
+	_tempday = REPLACE(_tempday,"nd","")
+	_tempday = REPLACE(_tempday,"rd","")
+	_tempday = REPLACE(_tempday,"th","")
+	_tempday = TOINT(_tempday) //Converts it to an integer
+	_month = birthday[4] //Just for readability
+	
+	if ((_month == 1 || _month == 3 || _month == 5 || _month == 7 || _month == 8 || _month == 10 || _month == 12) && _tempday >= 1 && _tempday <= 31) || (_month == 2 && _tempday >= 1 && _tempday <= 29) || ((_month == 4 || _month == 6 || _month == 9 || _month == 11) && _tempday >= 1 && _tempday <= 30) //This ugly function checks if the day falls into a valid range.
+	{
+		birthday[5] = _tempday
+		birthday[3] = Printday
+		birthday[1] = "%(birthday[4])/%(birthday[5])" //If you want to write dates as DD/MM, feel free to swap this around
+		birthday[0] = "%(birthday[2]) %(birthday[3])"
+		ERASEVAR("oldbirthday")
+		
+		if birthday[1] == "%(month)/%(day)" //if today is the user's birthday. Don't forget to switch this if you change the format to DD/MM
+		{
+			"\0\s[0]Oh, happy birthday!"
+		}
+		elseif birthday[1] == "4/7" //If it's on christmas. Put any date you'd like here. If you change the format to DD/MM, make sure you change any dates like this that might be in bootend.
+		{
+			"\0\s[0]You were born the same day as I was!\w8 What a nice coincidence."
+		}
+		else //if the birthday is not listed above.
+		{
+			"\0\s[0]\i[1]%(birthday[0]).\w2.\w2.\w4 \s[0]I'll remember."
+		}
+		--
+		"\n\n\![*]\q[Back to config,OnConfigMenu]\n\![*]\q[I'm done,cancelnodialogue]\e"
+	}
+	else //If it isn't a valid day, we open the input box again and have a \e so the dialogue below doesn't play.
+	{
+		"\0\s[1]I'm not sure that's correct.\w8\w8 Try again?"
+		--
+		"\n\n\![*]\q[Cancel,OnConfigMenu,cancelled birthday day]\![open,inputbox,OnUserBornDay,-1]\e"
+	}
+	
+}
+
+Printday //Sets the appropriate suffix
+{
+	if birthday[5] == 1 || birthday[5] == 21 || birthday[5] == 31
+	{
+		"%(birthday[5])st"
+	}
+	elseif birthday[5] == 2 || birthday[5] == 22
+	{
+		"%(birthday[5])nd"
+	}
+	elseif birthday[5] == 3 || birthday[5] == 23
+	{
+		"%(birthday[5])rd"
+	}
+	else
+	{
+		"%(birthday[5])th"
+	}
+}	
+
