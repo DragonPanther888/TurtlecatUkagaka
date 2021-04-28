@@ -352,15 +352,28 @@ OnUpdateComplete
 
 ghostver
 {
-	"1.0.0"
+	"1.0.1"
 }
 
 OnChangeLog
 {
-	"\![set,autoscroll,disable]\_q\b2\_l[90]-Version 1.0.0-\n\n/
+	"\![set,autoscroll,disable]\_q\b2/
+	\_l[90]-Version 1.0.1-\n\n/
+    -Put missing dear envelope in nameteach where it was supposed to go\n\n/
+    -Put Kade's files on github! Now you can download them from A Place that is Here, along with network updates.\n\n/
+    -Added fun intervals and wait tags, for dynamic dialogue shenanigans!\n\n/
+    -Fixed birthday related checks in bootend because apparently they were slightly broke\n\n/
+    -Added close dialogue. Kade will now say things in character when closing them!\n\n/
+    -Added some dialogue to aitalk\n\n/
+    -Updated links in the right-click menu\n\n/
+    -Now you can change your hemisphere! This is relevant because you can now see the season (among other things) when you open the menu.\n\n/
+    -Fixed some typos\n\n/
+    -Added petting dialogue!\n\n/
+    -Added a simple question menu\n\n\n/
+	\_l[90]-Version 1.0.0-\n\n/
 	-Initial release\n\n\n"
 	--
-	if reference0 == "FromMenu" //Checks to see if the user came here from the functions menu
+	if reference0 == "frommenu" //Checks to see if the user came here from the functions menu
 	{
 		"\![*]\q[Back to functions,OnFunctionMenu]\n"
 	}

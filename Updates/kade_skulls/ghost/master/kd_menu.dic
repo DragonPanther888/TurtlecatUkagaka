@@ -49,7 +49,7 @@ OnMenuRun
 	"\![*]\q[Ask a question,OnQuestionMenu]\n"
 	--
 	"\![*]\q[Config Menu,OnConfigMenu]\n/
-	\![*]\q[Functions,dosomething]\n\n"
+	\![*]\q[Functions,OnFunctionMenu]\n\n"
  	--
 	"\![*]\q[Nevermind,Cancel]\n\n"
 	--
@@ -250,7 +250,7 @@ Select.CANCEL
 	
 //Going back to the MenuRun function we finished above, this is if someone selects the Functions option, linked to dosomething. As you can see, it ends up as Select.dosomething.
 
-Select.dosomething
+OnFunctionMenu
 {
  		"\0\s[0]\b2This is the first function menu intro.\n\n"
  		"\0\s[0]\b2This is the second function menu intro.\n\n"
@@ -263,8 +263,9 @@ Select.dosomething
 		\![*]\q[Check Email,MailCheck]\n/
 		\![*]\q[Open SSP Preferences,sspconfig]\n/
 		\![*]\q[Empty Recycle Bin,ChoiceGarbagecan]\n/
+		\![*]\q[Changelog,OnChangeLog,frommenu]\n/
 		\![*]\q[System Information,ChoiceSystemInformation]\n\n/
- 		\![*]\q[Back to main menu,BACKTOMENU]\e"
+ 		\![*]\q[Back to main menu,OnMenuRun]\e"
 }
 
 //When the user clicks Open Calender. This will open the calender function of SSP, an in-built feature that you don't have to worry about in the least.
