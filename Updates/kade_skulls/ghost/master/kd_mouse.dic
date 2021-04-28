@@ -50,9 +50,34 @@ MouseMoveSakura
 			stroke[2]++
 			totalpets++
 			
-			"\0\s[0]You've found some petting dialogue.\e"
-			"\0\s[0]You've found more petting dialogue.\e"
-			"\0\s[0]You've found another bit of petting dialogue.\e"
+			if petspleaseanthank == 1
+			{
+				petspleaseanthank = 2
+				"\0\s[3]\i[2](They hum happily.)\e"
+			}
+			elseif petspleaseanthank == 2
+			{
+				if RAND(200) < 88
+				{
+					ERASEVAR("petspleaseanthank")
+					"\0\s[0]\i[1]Okay,\w4\s[0] that's enough for now.\e"
+					"\0\s[0]\i[1]You can stop now,\s[0]\w4 %(dearuser).\e"
+				}
+				else
+				{
+					"\0\s[3]\i[1]Mmmmm.\e"
+					"\0\s[3]\i[1]Hmmmmmm.\w2.\w2.\e"
+					"\0\s[3]\i[1]Mmmmmh.\w2.\w2.\e"
+					"\0\s[3]\i[1]Hmm.\e"
+					"\0\s[3]\i[1]Hmmmmh.\w2.\w2.\e"
+				}
+			}
+			else
+			{
+				"\0\s[4]\i[1](They jump,\w4 startled.)\w8\n\n[half]Nh-\w8\s[5] %(username)!!\w8 Please ask first.\e"
+				"\0\s[4]\i[1](They flinch,\w4 startled.)\w8\n\n[half]Nnf-\w8\s[5] %(username)!\w8 I implore you to ask before doing such a thing.\e"
+				"\0\s[4]\i[1](Kade startles,\w4 not expecting your touch.)\w8\n\n[half]Ehn-\w8\s[5] %(username)!\w8 Please do not do that without asking first.\e"
+			}
  		}
  	}
 	elseif reference4 == "Face"
@@ -62,7 +87,7 @@ MouseMoveSakura
 		if stroke[0] >= 40
 		{
 			stroke[0] = 0
-			"\0\s[1]That's my face.\e"
+			"\0\s[1]That is my face.\e"
 		}
 	}
 	elseif reference4 == "HandR" || reference4 == "HandL" //Another area set up by the collisions in surfaces.txt. You can expand this list with as many elseifs as you need depending on how many collisions you've set up.
@@ -83,8 +108,11 @@ MouseMoveSakura
 		{
 			stroke[0] = 0
 			"\0\s[1]Er... %(username)...?\e"
-			"\0\s[1]That is my hat?\e"
+			"\0\s[1]Please do not.\e"
 			"\0\s[1]May I inquire as to what exactly prompted this?\e"
+			"\0\s[1]%(Capitalize(dearuser)).\w2.\w2.\w4 could you perhaps refrain from touching my hat,\w4 please?\e"
+			"\0\s[1]Would it inconvenience you to keep your hands to themselves?\e"
+			"\0\s[2]%(username),\w4 I would \f[italic,true]really\f[italic,false] prefer if you would not do that.\e"
 		}
  	}
 			

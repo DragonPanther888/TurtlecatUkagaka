@@ -116,6 +116,7 @@ blanklist3
 	"List object 4"
 }
 
+//If you write all your envelopes as lowercase, you can send them through this function whenever you need the first letter capitalized! It'd look something like this: "%(Capitalize(exampleenvelope))"
 Capitalize
 {
 	_word = _argv[0] //Sets _word to the word the user sent
@@ -144,6 +145,41 @@ season //Current season
 	}
 }
 
+nowhour //hour12 displays the hour like a 12 hour clock, except for 12 which is displayed as 0
+{
+	if hour12 == 0; "12"
+	else; "%(hour12)"
+}
+
+nowmin //Adding a 0 to the minute if it's under 10
+{
+	if minute < 10; "0%(minute)"
+	else; "%(minute)"
+}
+
+runmin //Same as above but with the runtime minutes
+{
+	if runtime[1] < 10; "0%(runtime[1])"
+	else; "%(runtime[1])"
+}
+
+ap //AM or PM - ampm is 0 during am, and 1 during pm
+{
+ 	if ampm == 0; "AM"
+ 	else; "PM"
+}
+
+wd //Abbreviated week day
+{
+	if weekday == 0; "Sun"
+	elseif weekday == 1; "Mon"
+	elseif weekday == 2; "Tue"
+	elseif weekday == 3; "Wed"
+	elseif weekday == 4; "Thu"
+	elseif weekday == 5; "Fri"
+	else; "Sat"
+}
+
 nowday //Full week day
 {
 	_day = weekday
@@ -165,6 +201,42 @@ nowday //Full week day
 	elseif _day == 4; "Thursday"
 	elseif _day == 5; "Friday"
 	else; "Saturday"
+}
+
+nowmonth //The current month name
+{
+	_month = month
+	if _argv[0] == "next"
+	{
+		_month++
+		if _month > 12; _month = 1
+	}
+	if _argv[0] == "last"
+	{
+		_month--
+		if _month < 1; _month = 12
+	}
+	
+	if _month == 1; "January"
+	elseif _month == 2; "February"
+	elseif _month == 3; "March"
+	elseif _month == 4; "April"
+	elseif _month == 5; "May"
+	elseif _month == 6; "June"
+	elseif _month == 7; "July"
+	elseif _month == 8; "August"
+	elseif _month == 9; "September"
+	elseif _month == 10; "October"
+	elseif _month == 11; "November"
+	else; "December"
+}
+
+leapyear //Checks if this is a leap year
+{
+	if year % 4 != 0; 0
+	elseif year % 100 != 0; 1
+	elseif year % 400 != 0; 0
+	else; 1
 }
 
 //This envelope in particular I think is fun. You can use this in dialogue to pretend like your ghost is looking through your user's files!

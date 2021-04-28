@@ -27,13 +27,7 @@ OpenSakuraMenu
 
 OnMenuRun
  {	
- 	wd = GetWeekDay
- 	ap = GetAP
- 	nowmin = Getnowmin
- 	nowhour = Getnowhour
-	//These four statements basically get the day of the week, whether it's AM or PM, the hour, and the time. It's putting together the information to display the time at the bottom of the balloon. Pay it no mind.
-	--
-	"\n\n\_q\b2" //The \n\n means two new lines as detailed in the walkthrough, and \_q means quick session, meaning all the text from this point on will display instantly instead of a few letters at a time like normal ghost dialogue.
+ 	"\n\n\_q\b2" //The \n\n means two new lines as detailed in the walkthrough, and \_q means quick session, meaning all the text from this point on will display instantly instead of a few letters at a time like normal ghost dialogue.
 	--
 	if lastTalk != "" //What this does is check to see if the ghost has already said a random bit of dialogue on its own, essentially by seeing if the lastTalk thing is NOT empty (!= means "does not equal").
 	{
@@ -47,17 +41,21 @@ OnMenuRun
 	  //***********************************************************************
 	}
 	--
- 	"\![*]\q[Say something,OnAiTalk]\n"
-	"\![*]\q[Say something 2,OnAiTalk]\n"
+ 	"\![*]\q[Say something,OnAiTalk]\n\n[half]"
 	
 	//This option will force the ghost to say something from aitalk if the user clicks it. Just replace "Say something" and "Say something 2" with whatever captions you think would be appropriate for such an option. IF you don't want two options for captions, delete one of the lines.
 	//Advanced users, you can add multiple captions for any option you add to a menu you make just like this, as long as you separate it from the other options into its own section with two dashes above and below.
 	--
+	"\![*]\q[Ask a question,OnQuestionMenu]\n"
+	--
 	"\![*]\q[Config Menu,OnConfigMenu]\n/
-	\![*]\q[Functions,dosomething]\n\n[half]/
- 	\![*]\q[Nevermind,CANCEL]\n\n\n[half]%(wd) %(nowhour):%(nowmin) %(ap), %(month)/%(day)/%(year)\e"
-	
-	//These three lead to the Config Menu, the Function menu, and Cancel. You can leave these alone if you like. All the envelopes at the end (see word.dic) basically display the year, month, day, weekday, and time.
+	\![*]\q[Functions,dosomething]\n\n"
+ 	--
+	"\![*]\q[Nevermind,Cancel]\n\n"
+	--
+	"%(wd) %(nowhour):%(nowmin) %(ap), %(month)/%(day)/%(year) - %(season)"
+	--
+	"\nRuntime: %(runtime[0]):%(runmin)            Version %(ghostver)\e"
 }
 
 //Leave this alone
@@ -66,68 +64,54 @@ OnLastTalk
 "%(lastTalk)\e"
 }
 
-//This is figuring out what day of the week it is. Leave it alone.
-GetWeekDay
+
+
+OnQuestionMenu
 {
-	if weekday == 0
-	{"Sun"}
-	elseif weekday == 1
-	{"Mon"}
-	elseif weekday == 2
-	{"Tue"}
-	elseif weekday == 3
-	{"Wed"}
-	elseif weekday == 4
-	{"Thu"}
-	elseif weekday == 5
-	{"Fri"}
-	else
-	{"Sat"}
+	"You ask Kade...\n\n"
+	--
+	"\![*]\q[...if you can pet them?,OnUserQuery,askpets]\n/
+	\![*]\q[...when their birthday is?,OnUserQuery,askbirthday]\n/
+	\![*]\q[...if you can touch their hat?,OnUserQuery,askhat]\n\n"
+	--
+	"\![*]\q[Back to the menu,OnMenuRun]\e"
 }
 
-//This is finding out whether it's AM or PM. Leave it alone.
-GetAP
+OnUserQuery
 {
- 	if hour >= 0 && hour <= 11
- 		{"AM"}
- 	else
- 		{"PM"}
+	if reference0 == "askhat"
+	{
+		"\0\s[1]...I would prefer if you did not??\e"
+	}
+	elseif reference0 == "askpets"
+	{
+		"\0\s[0]Not right now,\w4\i[3] But thank you for asking!\e"
+		"\0\s[0]Not at this time,\w4 if you please.\e"
+		"\0\s[0]Thank you for asking,\w4 but I'm afraid I cannot indulge you at the moment.\w8 Perhaps later.\e"
+		"\0\s[0]\i[1]Of course,\w4\s[3]\i[1] %(dearuser).\e:eval=petspleaseanthank=1"
+		"\0\s[0]\i[1]You may.\w8\s[3]\i[1]\e:eval=petspleaseanthank=1"
+		"\0\s[0]\i[1]I would welcome it.\w8\s[3]\i[1]\e:eval=petspleaseanthank=1"
+	}
+	elseif reference0 == "askbirthday"
+	{
+		"\0\s[0]\i[3]My birthday is April 7th"
+		--
+		if birthday[1] == "4/7"
+		{
+			",\w4 the same as yours!\e"
+		}
+		--
+		"!\e"
+	}
 }
-
-//This is figuring out the minute. Leave it alone.
-Getnowmin
-{
-	if minute >= 0 && minute <=9
-		{"0%(minute)"}
-	else
-		{"%(minute)"}
-}
-
-//This is figuring out the hour. Leave it alone.
-Getnowhour
-{
-	if hour12 >= 0 && hour12 <=9
-		{"0%(hour12)"}
-	else
-		{"%(hour12)"}
-}
-
-//If someone selects an option linked to BACKTOMENU, it will go back to MenuRun.
-//Advanced users, note that this is formatted as Select.linkedfunction? Remember how it went \q[Displayed Name,linkedfunction] above? When a user clicks an option that doesn't begin with On, they'll be linked to Select.linkedfunction. Pay close attention as we go through and you'll see this in action.
-//*********************Advanced User Info*******************************
-//Some of you may be wondering why some of these Select.options lead to another function. Why not just put the config menu coding under Select.configmenu, instead of linking to TalkConfig?
-//Basically any function that's preceded with Select. is limited in its complexity and can only be called within its own .dic file in my experience. Why should you care, you ask? Well, if you're going to link to this function any other way, such as linking it in other .dic files or as a page in a menu, it needs to be a stand-alone function so it can be properly called. I'm pretty sure.
-//The basic jist is this; if you're going to reuse whatever it is the option leads to, you should make it its own function. Otherwise, you can leave it in Select.option. As a rule of thumb I'd probably put any complicated stuff in its own function, then use the Select.option to call the full function as you can see above. Simple dialogue responses to a choice can stay as a Select.option though (Like "Do you like going to raves and partying? Yes/No"). Study what stays as a Select.option and what links to another Function as we go through the file.
-//***********************************************************************
-
-//--TalkConfig
-//This menu allows the user to change their name and other information, as well as put in their birthday and change how often the ghost speaks. You can restructure how this looks if you want, but it's perfectly functional as is. You can of course change the dialogue though if you like.
 
 OnConfigMenu
 {
 	if username == ""; username = "User"
 	if they == ""; {they = "they"; them = "them"; their = "their"; theyre = "they're"}
+	if calldear == ""; calldear = "friend"
 	if birthday[0] == ""; birthday[0] = "???"
+	if hemisphere == ""; hemisphere = "Northern"
 	if deleteshitai == ""; deleteshitai = "Off"
 	--
 	if reference0 == "cancelled name change"; "\![close,inputbox,OnNameTeach]" //If the user cancels changing their name, it will send them back to the config menu, and run this extra bit of code to close the inputbox. Same deal with the others below, but for the birthday
@@ -143,9 +127,11 @@ OnConfigMenu
 	--
 	"\f[bold,1]Your pronouns:\f[bold,0] %(they)/%(them)/%(their) \f[sup,1](\q[Change them?,OnChangePronoun])\f[sup,0]\n"
 	--
-	"f[bold,1]Your nickname:\f[bold,0] %(dearuser) \f[sup,1](\q[Change it?,OnChangeDear])\f[sup,0]\n"
+	"\f[bold,1]Your nickname:\f[bold,0] %(dearuser) \f[sup,1](\q[Change it?,OnChangeDear])\f[sup,0]\n"
 	--
-	"\f[bold,1]Your birthday:\f[bold,0] %(birthday[0]) \f[sup,1](\q[Change it?,OnChangeBirthday])\f[sup,0]\n\n"
+	"\f[bold,1]Your birthday:\f[bold,0] %(birthday[0]) \f[sup,1](\q[Change it?,OnChangeBirthday])\f[sup,0]\n"
+	--
+	"\f[bold,1]Your hemisphere:\f[bold,0] %(hemisphere) \f[sup,1](\q[Toggle,ToggleHemisphere])\f[sup,0]\n\n"
 	--
 	"\f[bold,1]Talk Rate:\f[bold,0] - every %(talktime) \f[sup,1](\q[Change it,talkinter])\f[sup,0]\n\n"
 	--		
@@ -154,6 +140,20 @@ OnConfigMenu
 		}
 	--
 	"\![*]\q[Back to the menu,OnMenuRun]\e"
+}
+
+Select.ToggleHemisphere
+{
+	if hemisphere != "Northern"
+	{
+		hemisphere = "Northern"
+	}
+	else
+	{
+		hemisphere = "Southern"
+	}
+	--
+	OnConfigMenu
 }
 
 //These two options toggle whether or not you can delete your ghost. Leave them alone.

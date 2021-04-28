@@ -222,22 +222,77 @@ element1,overlay,surface1501.png,0,0
 2pattern0,1014,-1,overlay,0,0
 }
 
-//Main Character Worried pose
+//Calm pose, hat off
 surface3
 {
-element0,overlay,surface1503.png,0,0
+collision0,86,40,134,62,Head
+collision1,87,65,131,105,Face
+collision2,79,153,137,215,Hat
+
+element0,overlay,surface0.png,0,0
+element1,overlay,surface1301.png,0,0
+element3,overlay,surface1502.png,0,0
+
+0interval,random,4 //blink
+0pattern0,-1,10,overlay,0,0
+0pattern1,1002,5,overlayfast,0,0
+0pattern2,1001,10,overlayfast,0,0
+0pattern3,-1,3,overlay,0,0
+
+1interval,never //closed eyes down
+1pattern0,1002,-1,overlay,0,0
+
+2interval,never //closed eyes up
+2pattern0,1012,-1,overlay,0,0
 }
 
-//Main Character Sad/Disappointed pose
+//Surprised, startled pose
 surface4
 {
-element0,overlay,surface1504.png,0,0
+collision0,86,40,134,62,Head
+collision1,87,65,131,105,Face
+//collision2,79,153,137,215,Hat
+
+element0,overlay,surface0.png,0,0
+element1,overlay,surface1503.png,0,0
+element2,overlay,surface1302.png,0,0
+
+0interval,random,4 //blink
+0pattern0,-1,10,overlay,0,0
+0pattern1,1006,5,overlayfast,0,0
+0pattern2,1005,10,overlayfast,0,0
+0pattern3,-1,3,overlay,0,0
+
+1interval,never //hat hold
+1pattern0,1502,-1,overlay,0,0
 }
 
-//Main Character Smiling pose
+//Anxious, not-calm pose, recently startled edition
 surface5
 {
-element0,overlay,surface1505.png,0,0
+collision0,86,40,134,62,Head
+collision1,87,65,131,105,Face
+collision2,79,153,137,215,Hat
+
+element0,overlay,surface0.png,0,0
+element1,overlay,surface1504.png,0,0
+
+0interval,random,4 //blink
+0pattern0,-1,10,overlay,0,0
+0pattern1,1008,5,overlayfast,0,0
+0pattern2,1007,10,overlayfast,0,0
+0pattern3,-1,3,overlay,0,0
+
+1interval,always //hat, for maximum fidgety-ness
+1pattern0,1502,-1,overlay,0,0
+1pattern1,1211,200-500,overlay,0,0
+1pattern2,1212,100,overlay,0,0
+1pattern3,1213,200-500,overlay,0,0
+1pattern4,1214,100,overlay,0,0
+1pattern5,1215,200-500,overlay,0,0
+1pattern6,1216,100,overlay,0,0
+1pattern7,1217,200-500,overlay,0,0
+1pattern8,-1,100,overlay,0,0
 }
 
 //Main Character Contented pose

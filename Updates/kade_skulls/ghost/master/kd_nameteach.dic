@@ -13,7 +13,7 @@
 
 OnChangeName	
 {
-	"\0\s[0]A different name?\w4 Of course,\w4 putdearenvelopehere.\w4 What shall I call you from now on?"
+	"\0\s[0]A different name?\w4 Of course,\w4 %(dearuser).\w4 What shall I call you from now on?"
 	--
 	"\n\n\![*]\q[Cancel,OnConfigMenu,cancelled name change]\![set,balloontimeout,-1]\![open,inputbox,OnNameTeach,-1]\e"
 }
@@ -141,7 +141,7 @@ NameDone
 {
 	if firstboot == 0 //If the user was changing their name through the config menu
 	{
-		"\0\s[0]\i[1]%(username).\w2.\w2.\w4 \s[0]I'll remember.\n\n\![*]\q[Back to config,OnConfigMenu]\n\![*]\q[I'm done,cancelnodialogue]\e"
+		"\0\s[0]\i[1]\i[2]%(username).\w2.\w2.\w4 \s[0]I'll remember.\n\n\![*]\q[Back to config,OnConfigMenu]\n\![*]\q[I'm done,cancelnodialogue]\e"
 	}
 	else //This is continuing from FirstBoot
 	{
@@ -291,7 +291,7 @@ OnUserBornMonth
 	}
 	--
 	//If it's a valid month
-	"\s[0]%(birthday[2]), I see, I see...\w8 What was the day?"
+	"\s[0]%(birthday[2]),\w4 I see,\w4 I see...\w8 What was the day?"
 	--
 	"\n\n\![*]\q[Cancel,OnConfigMenu,cancelled birthday day]\![open,inputbox,OnUserBornDay,-1]\![set,balloontimeout,-1]\e"
 }

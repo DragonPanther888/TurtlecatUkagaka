@@ -1,0 +1,16 @@
+//Write important stuff here, like your plans for your ghost, your list of variables that you'll have to initialize, etc. Don't forget to remove this folder before you distribute your ghost! I also recommend keeping a development log so you can track your progress, and see what changes you've made and when. It can be very motivating!
+
+
+
+
+
+//---4/27/21---
+
+//-Not putting down stuff I did last week for ghost jam bc I don't wanna :V but currently working on finishing aitalk/mouse/menu things for kade v1.0.1!
+//-Added self care related dialogue to aitalk >>;;
+//-Added hemisphere functionality, as well as fun time things for the menu from x. template.
+//(Morning)
+//-Plans for petting: Kade will startle if you pet them and haven't asked. For asking, add a function in the menu asking "May I pet you?" Which sets a variable showing that you have asked to pet them. This leads to dialogue where Kade takes off their hat to allow pets, resetting the variable once pet. I think I can do that without having to add a variable to bootend, but we'll see. I really wanna get this update out today!
+//-Future Turtle take note-- make sure your FUCKING blinks are in the right order, otherwise it will look choppy.
+// Added pet dialogue for head and hat collisions
+// Added a question menu

@@ -1,5 +1,7 @@
 Charset,UTF-8
 __system_settings_version__,2
+GroupFlagOverride,noupdateauto,
+SurfaceTest.visible,1
 Char.VirtualDesktop,a3c4ffac-ec21-4060-84b0-c1da5e665efe
 Char0.center,1130
 shell,shell\master\
